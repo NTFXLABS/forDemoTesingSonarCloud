@@ -1,6 +1,6 @@
 name: Lint
 
-on: # yamllint disable-line rule:truthy
+on:
   push: null
   pull_request: null
 
@@ -14,7 +14,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-      # To report GitHub Actions status checks
       statuses: write
 
     steps:
@@ -27,12 +26,15 @@ jobs:
         uses: super-linter/super-linter@v7.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUTPUT_FORMAT: "html" # Can be "json" or "html"
-          OUTPUT_FOLDER: "super-linter-report"
+          OUTPUT_FORMAT: "html"
+          OUTPUT_FOLDER: "/tmp/super-linter-report"  # Use a standard folder in the temp directory
+
+      - name: List report files
+        run: ls -R /tmp/super-linter-report # Helps to verify the output path and filename
 
       - name: Upload lint report
-        if: always() # Ensures the artifact uploads even if the linter fails
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: lint-report
-          path: super-linter-report/linter-report.html # Update if using a different format
+          path: /tmp/super-linter-report # Upload the whole folder to ensure all reports are included
