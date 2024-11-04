@@ -1,0 +1,28 @@
+name: Lint Code Base
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Super-Linter
+        uses: super-linter/super-linter@v7.1.0
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: true       # Lint all files
+          VALIDATE_JAVASCRIPT_ES: true      # Enable JavaScript linting
+          VALIDATE_TYPESCRIPT_ES: true      # Enable TypeScript linting
+          VALIDATE_MARKDOWN: true           # Enable Markdown linting
+          VALIDATE_YAML: true               # Enable YAML linting
+          VALIDATE_PYTHON: true             # Enable Python linting
