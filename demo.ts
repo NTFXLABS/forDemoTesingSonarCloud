@@ -1,4 +1,3 @@
-import { SearchOutlined } from "@ant-design/icons";
 import { Input, Select, Space, Tag } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useGetFacilitiesQuery } from "../redux/api/facility/facility";
@@ -11,11 +10,11 @@ const StatusOptions = [
   { value: "inactive", label: "Inactive" },
 ];
 export default function useProviderFilter() {
-  const [selectedFilterkey, setSelectedFilterKey] = useState<string>("name");
+  const [selectedFilterkey, setSelectedFilterkey] = useState<string>("name");
   const [providerNameFiltervalue, setProviderNameFiltervalue] = useState<
     string | undefined
   >(undefined);
-  const [emailQueryFilterValue, setemailQueryFilterValue] = useState<
+  const [emailQueryFilterValue, setEmailQueryFilterValue] = useState<
     string | undefined
   >(undefined);
   const [statusQueryFilterValue, setStatusQueryFilterValue] = useState<
@@ -76,7 +75,7 @@ export default function useProviderFilter() {
       facilityId: facilityNameQueryFilterValue,
       licenseTypeId: licenseTypeNameQueryFilterValue,
       sortBy: sortingDetails?.sortingField,
-      direction: !!sortingDetails?.isDescending ? "DSC" : "ASC",
+      direction: sortingDetails?.isDescending ? "DSC" : "ASC",
     });
   };
 
@@ -90,7 +89,7 @@ export default function useProviderFilter() {
       facilityId: facilityNameQueryFilterValue,
       licenseTypeId: licenseTypeNameQueryFilterValue,
       sortBy: sortingDetails?.sortingField,
-      direction: !!sortingDetails?.isDescending ? "DSC" : "ASC",
+      direction: sortingDetails?.isDescending ? "DSC" : "ASC",
     });
   }, [
     pageNumber,
@@ -114,7 +113,7 @@ export default function useProviderFilter() {
         <Select
           value={selectedFilterkey}
           onChange={(value) => {
-            setSelectedFilterKey(value);
+            setSelectedFilterkey(value);
           }}
           style={{ width: "140px" }}
           options={[
@@ -144,7 +143,7 @@ export default function useProviderFilter() {
         {selectedFilterkey === "email" && (
           <Input
             onChange={(event) => {
-              setemailQueryFilterValue(event?.target?.value);
+              setEmailQueryFilterValue(event?.target?.value);
             }}
             style={{
               width: "320px",
@@ -267,7 +266,7 @@ export default function useProviderFilter() {
   return {
     TableFilters,
     filteredProviders: providersData?.providers || [],
-    providerTotalRecords: providersData?.totalRecords || 0,
+    providerTotalRecords: providersData?.totalRecords ?? 0,
     UseQueryHookResult: {
       reload,
       isLoading: facilitiesLoading && licenseTypesLoading && providersLoading,
