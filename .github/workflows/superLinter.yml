@@ -21,12 +21,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
           fetch-depth: 0
 
-      - name: Super-linter
-        uses: super-linter/super-linter@v7.1.0 # x-release-please-version
+      - name: Run Super-linter
+        uses: super-linter/super-linter@v7.1.0
         env:
-          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FORMAT: "html" # Can be "json" or "html"
+          OUTPUT_FOLDER: "super-linter-report"
+
+      - name: Upload lint report
+        if: always() # Ensures the artifact uploads even if the linter fails
+        uses: actions/upload-artifact@v3
+        with:
+          name: lint-report
+          path: super-linter-report/linter-report.html # Update if using a different format
