@@ -27,14 +27,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OUTPUT_FORMAT: "html"
-          OUTPUT_FOLDER: "/tmp/super-linter-report"  # Use a standard folder in the temp directory
+          OUTPUT_FOLDER: "/tmp/super-linter-report"
+
+      - name: Ensure report file exists
+        run: |
+          mkdir -p /tmp/super-linter-report
+          touch /tmp/super-linter-report/linter-report.html
 
       - name: List report files
-        run: ls -R /tmp/super-linter-report # Helps to verify the output path and filename
+        run: ls -R /tmp/super-linter-report
 
       - name: Upload lint report
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: lint-report
-          path: /tmp/super-linter-report # Upload the whole folder to ensure all reports are included
+          path: /tmp/super-linter-report/linter-report.html
